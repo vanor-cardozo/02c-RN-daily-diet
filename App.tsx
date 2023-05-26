@@ -1,6 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
-
 import {
   useFonts,
   NunitoSans_400Regular,
@@ -9,8 +6,12 @@ import {
 
 import { ThemeProvider } from "styled-components/native";
 import theme from "@theme/index";
+
+import { StatusBar } from "expo-status-bar";
+
+import { Routes } from "./src/routes";
+
 import { Loading } from "@components/Loading";
-import { Home } from "@screens/Home";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ NunitoSans_400Regular, NunitoSans_700Bold });
@@ -18,8 +19,8 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <>
-        {fontsLoaded ? <Home /> : <Loading />}
-        <StatusBar style="auto" />
+        <StatusBar style="dark" backgroundColor="transparent" translucent />
+        {fontsLoaded ? <Routes /> : <Loading />}
       </>
     </ThemeProvider>
   );
