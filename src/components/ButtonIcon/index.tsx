@@ -7,9 +7,11 @@ export type IconName = "plus" | "pencil" | "trash";
 type Props = {
   type: IconStyleProps;
   iconName?: IconName;
+  buttonName: string;
+  onPress: () => void;
 };
 
-export function ButtonIcon({ type, iconName }: Props) {
+export function ButtonIcon({ type, iconName, buttonName, ...rest }: Props) {
   let IconComponent = null;
   let iconColor = "";
 
@@ -29,9 +31,9 @@ export function ButtonIcon({ type, iconName }: Props) {
   }
 
   return (
-    <Container type={type}>
+    <Container type={type} {...rest}>
       {IconComponent && <IconComponent size={18} color={iconColor} />}
-      <ButtonText type={type}>Nova refeição</ButtonText>
+      <ButtonText type={type}>{buttonName}</ButtonText>
     </Container>
   );
 }
