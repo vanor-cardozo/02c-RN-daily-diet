@@ -10,9 +10,6 @@ import { Container, Text } from "./styles";
 export function Home() {
   const { navigate } = useNavigation();
 
-  const handleButtonPress = () => {
-    console.log("Button pressed, Nova refeição");
-  };
   return (
     <Container>
       <Header />
@@ -28,7 +25,7 @@ export function Home() {
         type="DARK"
         iconName="plus"
         buttonName="Nova refeição"
-        onPress={handleButtonPress}
+        onPress={() => navigate("meal")}
       />
 
       <MealList />
