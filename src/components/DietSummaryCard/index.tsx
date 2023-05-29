@@ -10,12 +10,13 @@ import {
 type Props = {
   color: DietSummaryStyleProps;
   title: string;
+  onPress: () => void;
 };
 
-export function DietSummaryCard({ color, title }: Props) {
+export function DietSummaryCard({ color, title, onPress }: Props) {
   return (
     <Container type={color}>
-      <ButtonContainer>
+      <ButtonContainer onPress={onPress}>
         <Icon type={color} />
       </ButtonContainer>
       <Title>{title}</Title>
