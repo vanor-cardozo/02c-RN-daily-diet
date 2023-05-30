@@ -8,6 +8,7 @@ import {
 } from "./styles";
 import { ArrowLeft } from "phosphor-react-native";
 import { ReactNode } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
   color?: BgColors;
@@ -16,10 +17,11 @@ type Props = {
 };
 
 export function ScreenBackGround({ color = "GRAY", title, children }: Props) {
+  const { goBack } = useNavigation();
   return (
     <Container color={color}>
       <HeaderContainer>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => goBack()}>
           <ArrowLeft />
         </TouchableOpacity>
         <TitleContainer>
