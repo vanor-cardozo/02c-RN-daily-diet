@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 };
 
-export function ButtonIcon({ type, iconName, buttonName, ...rest }: Props) {
+export function Button({ type, iconName, buttonName, ...rest }: Props) {
   let IconComponent = null;
   let iconColor = "";
 

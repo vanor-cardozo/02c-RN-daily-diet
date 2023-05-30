@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Header } from "@components/Header";
 import { DietSummaryCard } from "@components/DietSummaryCard";
-import { ButtonIcon } from "@components/ButtonIcon";
+import { Button } from "@components/Button";
 import { MealList } from "@components/MealList";
 
 import { Container, Text } from "./styles";
@@ -21,7 +21,7 @@ export function Home() {
       />
 
       <Text>Refeições</Text>
-      <ButtonIcon
+      <Button
         type="DARK"
         iconName="plus"
         buttonName="Nova refeição"
