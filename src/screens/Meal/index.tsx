@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
+
+import uuid from "react-native-uuid";
 
 import { ScreenBackGround } from "@components/ScreenBackground";
 
@@ -23,6 +25,7 @@ import theme from "@theme/index";
 import { Circle } from "phosphor-react-native";
 import { Button } from "@components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { addMeal } from "@storage/meal/addMeal";
 
 export function Meal() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -58,8 +61,9 @@ export function Meal() {
     }
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const newMeal = {
+      id: uuid.v4().toString(),
       date: selectedDate,
       name: mealName.trimStart(),
       description: mealDescription.trimStart(),
@@ -71,13 +75,18 @@ export function Meal() {
     );
 
     if (areAllFieldsFilled) {
+      await addMeal(newMeal);
       if (newMeal.diet) {
         navigate("dietFeedback");
       } else {
         navigate("noDietFeedback");
       }
     } else {
-      console.log("preencher todos os campos");
+      Alert.alert(
+        "Adicionar refeição",
+        "Verifique se todos os campos estão preenchidos!",
+        [{ text: "Ok", style: "cancel" }]
+      );
     }
   }
 
