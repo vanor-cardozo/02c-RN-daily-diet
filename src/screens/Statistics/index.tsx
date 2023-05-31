@@ -10,7 +10,7 @@ import { getAllMeals } from "@storage/meal/getMeals";
 import { calculateMealsStats } from "@utils/calculateMealsStats";
 import { Loading } from "@components/Loading";
 
-type StatsProps = {
+export type StatsProps = {
   dietMealsCounter: number;
   dietMealsMaxSequence: number;
   mealsDietPercentage: string;
@@ -42,11 +42,13 @@ export function Statistics() {
   return isLoading ? (
     <Loading />
   ) : (
-    <Container color="GREEN">
+    <Container
+      color={Number(mealsStats?.mealsDietPercentage) > 50 ? "GREEN" : "RED"}
+    >
       <DietSummaryHeader
         title={`${mealsStats?.mealsDietPercentage}%`}
         subtitle="das refeições dentro da dieta"
-        color="GREEN"
+        color={Number(mealsStats?.mealsDietPercentage) > 50 ? "GREEN" : "RED"}
       />
       <StatisticsContainer>
         <Text> Estatísticas gerais</Text>

@@ -13,11 +13,12 @@ import { getAllMeals } from "@storage/meal/getMeals";
 
 import { groupMealsByDate } from "@utils/groupMealsByDate";
 import { calculateMealsStats } from "@utils/calculateMealsStats";
+import { StatsProps } from "@screens/Statistics";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [meals, setMeals] = useState<Data>([]);
-  const [mealsStats, setMealsStats] = useState();
+  const [mealsStats, setMealsStats] = useState<StatsProps>();
 
   const { navigate } = useNavigation();
 
@@ -51,7 +52,9 @@ export function Home() {
           <Header />
 
           <DietSummaryCard
-            color="GREEN"
+            color={
+              Number(mealsStats?.mealsDietPercentage) > 50 ? "GREEN" : "RED"
+            }
             title={`${mealsStats?.mealsDietPercentage}%`}
             onPress={() => navigate("statistics")}
           />
