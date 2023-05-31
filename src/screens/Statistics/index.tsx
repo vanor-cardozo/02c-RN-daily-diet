@@ -1,12 +1,50 @@
-import { DietSummaryHeader } from "@components/DietSummaryHeader";
+import { useEffect, useState } from "react";
+
 import { Row, Container, StatisticsContainer, Text } from "./styles";
+
+import { DietSummaryHeader } from "@components/DietSummaryHeader";
 import { InfoCard } from "@components/InfoCard";
 
+import { getAllMeals } from "@storage/meal/getMeals";
+
+import { calculateMealsStats } from "@utils/calculateMealsStats";
+import { Loading } from "@components/Loading";
+
+type StatsProps = {
+  dietMealsCounter: number;
+  dietMealsMaxSequence: number;
+  mealsDietPercentage: string;
+  noDietMealsCounter: number;
+  totalMealsCounter: number;
+};
+
 export function Statistics() {
-  return (
+  const [isLoading, setIsLoading] = useState(true);
+  const [mealsStats, setMealsStats] = useState<StatsProps>();
+
+  async function fetchMealsData() {
+    try {
+      setIsLoading(true);
+      const data = await getAllMeals();
+      const stats = calculateMealsStats(data);
+      setMealsStats(stats);
+    } catch (error) {
+      console.log("fetchMealsData", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchMealsData();
+  }, []);
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Container color="GREEN">
       <DietSummaryHeader
-        title="90,86%"
+        title={`${mealsStats?.mealsDietPercentage}%`}
         subtitle="das refeições dentro da dieta"
         color="GREEN"
       />
@@ -15,23 +53,30 @@ export function Statistics() {
 
         <Row>
           <InfoCard
-            title="22"
+            title={mealsStats?.dietMealsMaxSequence ?? 0}
             subtitle="melhor sequência de pratos dentro da dieta"
           />
         </Row>
 
         <Row>
-          <InfoCard title="109" subtitle="refeições registradas" />
+          <InfoCard
+            title={mealsStats?.totalMealsCounter ?? 0}
+            subtitle="refeições registradas"
+          />
         </Row>
 
         <Row>
           <InfoCard
-            title="99"
+            title={mealsStats?.dietMealsCounter ?? 0}
             subtitle="refeições dentro da dieta"
             color="GREEN"
           />
 
-          <InfoCard title="10" subtitle="refeições fora da dieta" color="RED" />
+          <InfoCard
+            title={mealsStats?.noDietMealsCounter ?? 0}
+            subtitle="refeições fora da dieta"
+            color="RED"
+          />
         </Row>
       </StatisticsContainer>
     </Container>

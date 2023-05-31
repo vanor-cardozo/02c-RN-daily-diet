@@ -1,7 +1,7 @@
 import { CardColorProps, Container, SubTitle, Title } from "./styles";
 
 type Props = {
-  title: string;
+  title: string | number;
   subtitle: string;
   color?: CardColorProps;
 };
