@@ -11,6 +11,8 @@ import {
   ButtonsContainer,
 } from "./styles";
 
+import { Alert } from "react-native";
+
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { getMealById } from "@storage/meal/getMealById";
@@ -23,6 +25,7 @@ import { dateFormatter } from "@utils/dateFormatter";
 import { Circle } from "phosphor-react-native";
 import theme from "@theme/index";
 import { Button } from "@components/Button";
+import { removeMeal } from "@storage/meal/removeMeal";
 
 type RouteParams = {
   mealId: string;
@@ -58,6 +61,32 @@ export function MealDetail() {
   useEffect(() => {
     getStoredMeal();
   }, []);
+
+  async function handleRemoveMeal() {
+    try {
+      await removeMeal(mealId);
+    } catch (error) {
+      console.log("Falha do excluir refeição", error);
+    } finally {
+      navigate("home");
+    }
+  }
+
+  async function confirmationToRemoveMeal() {
+    Alert.alert(
+      "Refeição",
+      "Deseja realmente excluir o registro da refeição?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Sim, excluir",
+          onPress: () => {
+            handleRemoveMeal();
+          },
+        },
+      ]
+    );
+  }
 
   return isLoading ? (
     <Loading />
@@ -105,7 +134,7 @@ export function MealDetail() {
                 type="LIGHT"
                 iconName="trash"
                 buttonName="Excluir refeição"
-                onPress={() => console.log("excluir refeição")}
+                onPress={() => confirmationToRemoveMeal()}
               />
             </ButtonsContainer>
           </>
