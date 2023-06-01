@@ -27,14 +27,14 @@ import { Button } from "@components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { addMeal } from "@storage/meal/addMeal";
 
-export function Meal() {
+export function NewMeal() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const [mealName, setMealName] = useState("");
   const [mealDescription, setMealDescription] = useState("");
-  const [mealDiet, setMealDiet] = useState(false);
+  const [mealDiet, setMealDiet] = useState<boolean | undefined>(undefined);
 
   const [buttonGreenPressed, setButtonGreenPressed] = useState(false);
   const [buttonRedPressed, setButtonRedPressed] = useState(false);
@@ -69,7 +69,6 @@ export function Meal() {
       description: mealDescription.trimStart(),
       diet: mealDiet,
     };
-
     const areAllFieldsFilled = Object.values(newMeal).every(
       (value) => value !== undefined && value !== ""
     );

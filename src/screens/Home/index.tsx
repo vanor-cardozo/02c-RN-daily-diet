@@ -64,7 +64,7 @@ export function Home() {
             type="DARK"
             iconName="plus"
             buttonName="Nova refeição"
-            onPress={() => navigate("meal")}
+            onPress={() => navigate("newMeal")}
           />
 
           <MealList DATA={meals} />
