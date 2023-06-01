@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+
 import { SectionList, ListRenderItemInfo } from "react-native";
 import {
   ListHeader,
@@ -8,6 +10,7 @@ import {
   MealText,
   TimeText,
 } from "./styles";
+
 import { timeFormatter } from "@utils/timeFormatter";
 
 export type MealItemProps = {
@@ -31,8 +34,9 @@ type DataItem = {
 export type Data = DataItem[];
 
 function renderItem({ item }: ListRenderItemInfo<MealItemProps>) {
+  const { navigate } = useNavigation();
   return (
-    <ListItem>
+    <ListItem onPress={() => navigate("mealDetail", { mealId: item.id })}>
       <TimeText>{timeFormatter(item.date)}</TimeText>
       <MealContainer>
         <MealText numberOfLines={1}>{item.name}</MealText>

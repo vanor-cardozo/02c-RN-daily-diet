@@ -1,3 +1,4 @@
+import { TouchableOpacity } from "react-native";
 import styled, { css } from "styled-components/native";
 
 type Props = {
@@ -13,7 +14,7 @@ export const ListHeader = styled.Text`
   margin-top: 16px
 `;
 
-export const ListItem = styled.View`
+export const ListItem = styled(TouchableOpacity)`
   width: 100%;
   flex-direction: row;
   padding: 14px 16px 14px 12px;

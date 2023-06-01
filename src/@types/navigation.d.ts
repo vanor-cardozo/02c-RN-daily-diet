@@ -6,6 +6,9 @@ export declare global {
       newMeal: undefined;
       dietFeedback: undefined;
       noDietFeedback: undefined;
+      mealDetail: {
+        mealId: string;
+      };
     }
   }
 }
