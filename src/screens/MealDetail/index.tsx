@@ -11,7 +11,7 @@ import {
   ButtonsContainer,
 } from "./styles";
 
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { getMealById } from "@storage/meal/getMealById";
 
@@ -40,6 +40,7 @@ export function MealDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [meal, setMeal] = useState<mealStored>();
 
+  const { navigate } = useNavigation();
   const route = useRoute();
   const { mealId } = route.params as RouteParams;
 
@@ -98,7 +99,7 @@ export function MealDetail() {
                 type="DARK"
                 iconName="pencil"
                 buttonName="Editar refeição"
-                onPress={() => console.log("editar refeição")}
+                onPress={() => navigate("editMeal", { mealId: mealId })}
               />
               <Button
                 type="LIGHT"

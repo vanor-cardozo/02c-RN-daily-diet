@@ -9,6 +9,9 @@ export declare global {
       mealDetail: {
         mealId: string;
       };
+      editMeal: {
+        mealId: string;
+      };
     }
   }
 }
