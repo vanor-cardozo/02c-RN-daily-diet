@@ -11,8 +11,6 @@ import {
   ButtonsContainer,
 } from "./styles";
 
-import { Alert } from "react-native";
-
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { getMealById } from "@storage/meal/getMealById";
@@ -26,6 +24,7 @@ import { Circle } from "phosphor-react-native";
 import theme from "@theme/index";
 import { Button } from "@components/Button";
 import { removeMeal } from "@storage/meal/removeMeal";
+import { AlertModal } from "@components/AlertModal";
 
 type RouteParams = {
   mealId: string;
@@ -42,6 +41,7 @@ type mealStored = {
 export function MealDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [meal, setMeal] = useState<mealStored>();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const { navigate } = useNavigation();
   const route = useRoute();
@@ -68,78 +68,85 @@ export function MealDetail() {
     } catch (error) {
       console.log("Falha do excluir refeição", error);
     } finally {
+      setModalVisible(false);
       navigate("home");
     }
   }
 
-  async function confirmationToRemoveMeal() {
-    Alert.alert(
-      "Refeição",
-      "Deseja realmente excluir o registro da refeição?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Sim, excluir",
-          onPress: () => {
-            handleRemoveMeal();
-          },
-        },
-      ]
-    );
+  function handleCloseModal() {
+    console.log("chamei o close modal");
+    setModalVisible(false);
+  }
+
+  function handleOpenModal() {
+    console.log("chamei o open modal");
+
+    setModalVisible(true);
   }
 
   return isLoading ? (
     <Loading />
   ) : (
-    <ScreenBackGround title="Refeição" color={meal?.diet ? "GREEN" : "RED"}>
-      <Container>
-        {meal && (
-          <>
-            <MealContainer>
-              <MealTitle>{meal.name}</MealTitle>
+    <>
+      <AlertModal
+        isVisible={isModalVisible}
+        message="Deseja realmente excluir o registro da refeição?"
+        confirmTextButton="Sim, excluir"
+        cancelTextButton="Cancelar"
+        onCancel={handleCloseModal}
+        onConfirm={handleRemoveMeal}
+      />
 
-              <MealText>{meal.description}</MealText>
+      <ScreenBackGround title="Refeição" color={meal?.diet ? "GREEN" : "RED"}>
+        <Container>
+          {meal && (
+            <>
+              <MealContainer>
+                <MealTitle>{meal.name}</MealTitle>
 
-              <MealSubtitle>Data e hora</MealSubtitle>
-              <MealText>{dateFormatter(meal.date)}</MealText>
+                <MealText>{meal.description}</MealText>
 
-              {meal.diet ? (
-                <TagView>
-                  <Circle
-                    size={10}
-                    weight="fill"
-                    color={theme.COLORS.GREEN_DARK}
-                  />
-                  <TagText>dentro da dieta</TagText>
-                </TagView>
-              ) : (
-                <TagView>
-                  <Circle
-                    size={10}
-                    weight="fill"
-                    color={theme.COLORS.RED_DARK}
-                  />
-                  <TagText>fora da dieta</TagText>
-                </TagView>
-              )}
-            </MealContainer>
-            <ButtonsContainer>
-              <Button
-                type="DARK"
-                iconName="pencil"
-                buttonName="Editar refeição"
-                onPress={() => navigate("editMeal", { mealId: mealId })}
-              />
-              <Button
-                type="LIGHT"
-                iconName="trash"
-                buttonName="Excluir refeição"
-                onPress={() => confirmationToRemoveMeal()}
-              />
-            </ButtonsContainer>
-          </>
-        )}
-      </Container>
-    </ScreenBackGround>
+                <MealSubtitle>Data e hora</MealSubtitle>
+                <MealText>{dateFormatter(meal.date)}</MealText>
+
+                {meal.diet ? (
+                  <TagView>
+                    <Circle
+                      size={10}
+                      weight="fill"
+                      color={theme.COLORS.GREEN_DARK}
+                    />
+                    <TagText>dentro da dieta</TagText>
+                  </TagView>
+                ) : (
+                  <TagView>
+                    <Circle
+                      size={10}
+                      weight="fill"
+                      color={theme.COLORS.RED_DARK}
+                    />
+                    <TagText>fora da dieta</TagText>
+                  </TagView>
+                )}
+              </MealContainer>
+              <ButtonsContainer>
+                <Button
+                  type="DARK"
+                  iconName="pencil"
+                  buttonName="Editar refeição"
+                  onPress={() => navigate("editMeal", { mealId: mealId })}
+                />
+                <Button
+                  type="LIGHT"
+                  iconName="trash"
+                  buttonName="Excluir refeição"
+                  onPress={() => handleOpenModal()}
+                />
+              </ButtonsContainer>
+            </>
+          )}
+        </Container>
+      </ScreenBackGround>
+    </>
   );
 }
