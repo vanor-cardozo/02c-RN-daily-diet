@@ -26,12 +26,15 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { getMealById } from "@storage/meal/getMealById";
 import { updateMealStorage } from "@storage/meal/updateMealStorage";
+import { Loading } from "@components/Loading";
 
 type RouteParams = {
   mealId: string;
 };
 
 export function EditMeal() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -61,6 +64,8 @@ export function EditMeal() {
       }
     } catch (error) {
       console.log("erro ao carregar storage", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -124,7 +129,9 @@ export function EditMeal() {
     setMealDiet(false);
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <ScreenBackGround title="Editar refeição">
       <FormContainer>
         <InputsContainer>
