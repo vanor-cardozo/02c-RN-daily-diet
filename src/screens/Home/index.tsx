@@ -1,7 +1,14 @@
 import { useCallback, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { Container, Text } from "./styles";
+import {
+  Container,
+  SubTitle,
+  Text,
+  Title,
+  WelcomeContainer,
+  WelcomeImage,
+} from "./styles";
 
 import { Header } from "@components/Header";
 import { DietSummaryCard } from "@components/DietSummaryCard";
@@ -15,6 +22,8 @@ import { groupMealsByDate } from "@utils/groupMealsByDate";
 import { calculateMealsStats } from "@utils/calculateMealsStats";
 import { StatsProps } from "@screens/Statistics";
 
+import welcomeImage from "@assets/welcome-illustration.png";
+
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [meals, setMeals] = useState<Data>([]);
@@ -27,8 +36,8 @@ export function Home() {
       setIsLoading(true);
       const data = await getAllMeals();
       const stats = calculateMealsStats(data);
-      setMealsStats(stats);
       const dataFormatted = groupMealsByDate(data);
+      setMealsStats(stats);
       setMeals(dataFormatted);
     } catch (error) {
       console.log("fetchMealsData", error);
@@ -51,15 +60,25 @@ export function Home() {
         <>
           <Header />
 
-          <DietSummaryCard
-            color={
-              Number(mealsStats?.mealsDietPercentage) > 50 ? "GREEN" : "RED"
-            }
-            title={`${mealsStats?.mealsDietPercentage}%`}
-            onPress={() => navigate("statistics")}
-          />
+          {meals.length === 0 ? (
+            <WelcomeContainer>
+              <Title>Bem vindo(a)!</Title>
+              <SubTitle>
+                Adicione uma nova refeição e acompanhe seu desempenho
+              </SubTitle>
+              <WelcomeImage source={welcomeImage} />
+            </WelcomeContainer>
+          ) : (
+            <DietSummaryCard
+              color={
+                Number(mealsStats?.mealsDietPercentage) > 50 ? "GREEN" : "RED"
+              }
+              title={`${mealsStats?.mealsDietPercentage}%`}
+              onPress={() => navigate("statistics")}
+            />
+          )}
 
-          <Text>Refeições</Text>
+          {meals.length !== 0 && <Text>Refeições</Text>}
           <Button
             type="DARK"
             iconName="plus"
