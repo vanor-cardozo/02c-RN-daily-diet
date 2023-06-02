@@ -74,13 +74,10 @@ export function MealDetail() {
   }
 
   function handleCloseModal() {
-    console.log("chamei o close modal");
     setModalVisible(false);
   }
 
   function handleOpenModal() {
-    console.log("chamei o open modal");
-
     setModalVisible(true);
   }
 
