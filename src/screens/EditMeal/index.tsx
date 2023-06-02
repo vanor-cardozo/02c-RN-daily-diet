@@ -27,6 +27,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { getMealById } from "@storage/meal/getMealById";
 import { updateMealStorage } from "@storage/meal/updateMealStorage";
 import { Loading } from "@components/Loading";
+import { AlertModal } from "@components/AlertModal";
 
 type RouteParams = {
   mealId: string;
@@ -45,6 +46,8 @@ export function EditMeal() {
 
   const [buttonGreenPressed, setButtonGreenPressed] = useState(false);
   const [buttonRedPressed, setButtonRedPressed] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { navigate } = useNavigation();
   const route = useRoute();
@@ -109,11 +112,7 @@ export function EditMeal() {
       await updateMealStorage(meal);
       navigate("home");
     } else {
-      Alert.alert(
-        "Adicionar refeição",
-        "Verifique se todos os campos estão preenchidos!",
-        [{ text: "Ok", style: "cancel" }]
-      );
+      setIsModalVisible(true);
     }
   }
 
@@ -129,10 +128,20 @@ export function EditMeal() {
     setMealDiet(false);
   }
 
+  function handleCloseModal() {
+    setIsModalVisible(false);
+  }
+
   return isLoading ? (
     <Loading />
   ) : (
     <ScreenBackGround title="Editar refeição">
+      <AlertModal
+        isVisible={isModalVisible}
+        message="Verifique se todos os campos estão preenchidos/selecionados!"
+        cancelTextButton="ok"
+        onCancel={handleCloseModal}
+      />
       <FormContainer>
         <InputsContainer>
           <InputLabel>Nome</InputLabel>

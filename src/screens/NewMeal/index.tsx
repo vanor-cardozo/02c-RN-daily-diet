@@ -26,6 +26,7 @@ import { Circle } from "phosphor-react-native";
 import { Button } from "@components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { addMeal } from "@storage/meal/addMeal";
+import { AlertModal } from "@components/AlertModal";
 
 export function NewMeal() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -38,6 +39,8 @@ export function NewMeal() {
 
   const [buttonGreenPressed, setButtonGreenPressed] = useState(false);
   const [buttonRedPressed, setButtonRedPressed] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { navigate } = useNavigation();
 
@@ -81,11 +84,7 @@ export function NewMeal() {
         navigate("noDietFeedback");
       }
     } else {
-      Alert.alert(
-        "Adicionar refeição",
-        "Verifique se todos os campos estão preenchidos!",
-        [{ text: "Ok", style: "cancel" }]
-      );
+      setIsModalVisible(true);
     }
   }
 
@@ -101,8 +100,18 @@ export function NewMeal() {
     setMealDiet(false);
   }
 
+  function handleCloseModal() {
+    setIsModalVisible(false);
+  }
+
   return (
     <ScreenBackGround title="Refeição">
+      <AlertModal
+        isVisible={isModalVisible}
+        message="Verifique se todos os campos estão preenchidos/selecionados!"
+        cancelTextButton="ok"
+        onCancel={handleCloseModal}
+      />
       <FormContainer>
         <InputsContainer>
           <InputLabel>Nome</InputLabel>

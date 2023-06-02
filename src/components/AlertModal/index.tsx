@@ -15,9 +15,9 @@ interface AlertModalProps {
   isVisible: boolean;
   message: string;
   cancelTextButton: string;
-  confirmTextButton: string;
+  confirmTextButton?: string;
   onCancel: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
 }
 
 export function AlertModal({
@@ -38,9 +38,11 @@ export function AlertModal({
               <CancelButtonText>{cancelTextButton}</CancelButtonText>
             </CancelButton>
 
-            <ConfirmButton onPress={() => onConfirm()}>
-              <ConfirmButtonText>{confirmTextButton}</ConfirmButtonText>
-            </ConfirmButton>
+            {onConfirm && (
+              <ConfirmButton onPress={() => onConfirm()}>
+                <ConfirmButtonText>{confirmTextButton}</ConfirmButtonText>
+              </ConfirmButton>
+            )}
           </ModalButtonsContainer>
         </MessageContainer>
       </ModalContainer>
